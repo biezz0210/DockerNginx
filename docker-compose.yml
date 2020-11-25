@@ -1,0 +1,20 @@
+version: '3.5'
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "7890:7890"
+    volumes:
+      - .:/code
+      - ./config/nginx:/etc/nginx/conf.d
+    depends_on:
+      - web
+  web:
+    build: 
+      context: .
+      dockerfile: Dockerfile
+    command: gunicorn DockerProject.wsgi:application --bind 0.0.0.0:7890
+    volumes: 
+      - .:/code
+    expose:
+      - "7890"
